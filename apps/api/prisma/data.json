@@ -1,0 +1,30 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "full_name": "Customer Test",
+      "username": "Customer Nich",
+      "email": "test@mail.com",
+      "password": "$2b$10$.ghPwWl3.0q2M8l6p2rgReaxYiSHo3GdBGCYSyyaDrD3WhVBamEH.",
+      "role": "Customer",
+      "point_balance": 0,
+      "gender": "Pria",
+      "image": "AVATAR-1724733048807.jpeg",
+      "birth_date": "2000-01-01",
+      "is_verified": false
+    },
+    {
+      "id": 2,
+      "full_name": "Customer Test",
+      "username": "Customer Nich",
+      "email": "test@mail.com",
+      "password": "$2b$10$.ghPwWl3.0q2M8l6p2rgReaxYiSHo3GdBGCYSyyaDrD3WhVBamEH.",
+      "role": "Customer",
+      "point_balance": 0,
+      "gender": "Pria",
+      "image": "AVATAR-1724733048807.jpeg",
+      "birth_date": "2000-01-01",
+      "is_verified": false
+    }
+  ]
+}

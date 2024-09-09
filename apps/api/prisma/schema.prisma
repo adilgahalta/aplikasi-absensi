@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum type {
+  check_in
+  check_out
+}
+
+enum gender {
+  Pria
+  Wanita
+}
+
+model User {
+  id            Int          @id @default(autoincrement())
+  employee_code String       @unique
+  password      String
+  first_name    String
+  last_name     String
+  birthdate     DateTime
+  gender        gender
+  department    String
+  email         String
+  phone_number  String
+  Attendance    Attendance[]
+  Role          Role?        @relation(fields: [roleId], references: [id])
+  roleId        Int?
+
+  @@map("users")
+}
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String
+  user User[]
+
+  @@map("roles")
+}
+
+model Attendance {
+  id              Int       @id @default(autoincrement())
+  user_id         User      @relation(fields: [userId], references: [id])
+  userId          Int
+  attendance_type type
+  check_in_time   DateTime
+  check_out_time  DateTime?
+  attendance_date DateTime  @default(now())
+  photo_url       String
+
+  @@map("attendances")
+}
