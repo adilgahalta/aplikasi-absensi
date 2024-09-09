@@ -11,9 +11,17 @@ export class AttendanceController {
     }
   }
 
-  async attendanceLog(req: Request, res: Response, next: NextFunction) {
+  async attendanceCheckIn(req: Request, res: Response, next: NextFunction) {
     try {
-      const data = await AttendanceService.AttendanceLog(req);
+      const data = await AttendanceService.checkIn(req);
+      return res.send(responseHandler("Logging succesfull", data));
+    } catch (error) {
+      next(error);
+    }
+  }
+  async attendanceCheckOut(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await AttendanceService.checkOut(req);
       return res.send(responseHandler("Logging succesfull", data));
     } catch (error) {
       next(error);

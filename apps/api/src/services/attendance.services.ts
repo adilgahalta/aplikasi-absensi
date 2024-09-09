@@ -3,24 +3,47 @@ import { Prisma } from "@prisma/client";
 import { ErrorHandler } from "../helpers/response";
 import prisma from "../prisma";
 export class AttendanceService {
-  static async AttendanceLog(req: Request) {
+  static async checkIn(req: Request) {
     try {
-      const { userId, attendance_type, photo_url } = req.body;
+      const { userId, check_in_time } = req.body;
       const data: Prisma.AttendanceCreateInput = {
-        user_id: {
+        User: {
           connect: {
             id: Number(userId),
           },
         },
-        attendance_type,
-        attendance_date: new Date(),
-        photo_url,
+        check_in_time,
       };
-
-      const res = await prisma.attendance.create({ data });
-      return res;
+      if (req?.file) {
+        const image = req.file;
+        data.check_in_photo = image.filename;
+      }
+      return await prisma.attendance.create({ data });
     } catch (error) {
-      throw new ErrorHandler("Failed to log. Try Again!", 400);
+      throw new ErrorHandler("Failed to check in. Try Again!", 400);
+    }
+  }
+  static async checkOut(req: Request) {
+    try {
+      const { userId, check_in_time, check_out_time } = req.body;
+
+      const data: Prisma.AttendanceUpdateInput = {
+        User: {
+          connect: {
+            id: Number(userId),
+          },
+        },
+        check_out_time,
+        check_out_photo: req.file?.filename,
+      };
+      return await prisma.attendance.update({
+        data,
+        where: {
+          id: Number(userId),
+        },
+      });
+    } catch (error) {
+      throw new ErrorHandler("Failed to check out. Try Again!", 400);
     }
   }
   static async getAttendanceLog() {

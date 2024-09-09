@@ -34,7 +34,7 @@ model User {
   department    String
   email         String
   phone_number  String
-  Attendance    Attendance[]
+  attendance    Attendance[]
   Role          Role?        @relation(fields: [roleId], references: [id])
   roleId        Int?
 
@@ -50,14 +50,14 @@ model Role {
 }
 
 model Attendance {
-  id              Int       @id @default(autoincrement())
-  user_id         User      @relation(fields: [userId], references: [id])
-  userId          Int
-  attendance_type type
+  id Int @id @default(autoincrement())
+
   check_in_time   DateTime
+  check_in_photo  String?
   check_out_time  DateTime?
-  attendance_date DateTime  @default(now())
-  photo_url       String
+  check_out_photo String?
+  User            User?     @relation(fields: [userId], references: [id])
+  userId          Int?
 
   @@map("attendances")
 }
