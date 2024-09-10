@@ -11,7 +11,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     if (!employee_code || !password) {
-      setError(new Error("Both Employee Code and password are required"));
+      setError(new Error("Both Employee and password are required"));
       return;
     }
     const data = { employee_code, password };

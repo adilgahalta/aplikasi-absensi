@@ -40,6 +40,7 @@ export class AuthService {
         phone_number,
         roleId,
       } = req.body;
+      console.log(password, roleId, email);
       const hashPassword = await hash(password, 10);
 
       const data: Prisma.UserCreateInput = {
@@ -65,6 +66,7 @@ export class AuthService {
 
       await prisma.user.create({ data });
     } catch (error) {
+      console.log(error);
       throw new ErrorHandler("Failed Create new Empoloyee", 400);
     }
   }

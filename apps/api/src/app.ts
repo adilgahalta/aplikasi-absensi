@@ -25,8 +25,8 @@ export default class App {
 
   private configure(): void {
     this.app.use(cors());
-    this.app.use(json());
     this.app.use(urlencoded({ extended: true }));
+    this.app.use(json());
     this.app.use(express.static(join(__dirname, "/public/images")));
   }
 

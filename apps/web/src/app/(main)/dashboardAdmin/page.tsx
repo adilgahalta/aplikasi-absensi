@@ -36,47 +36,36 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const data: Payment[] = [
+const data: User[] = [
   {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
+    id: "1",
+    first_name: "John",
+    last_name: "Doe",
+    check_in_time: "2024-09-10T08:00:00Z",
+    check_out_time: "2024-09-10T17:00:00Z",
+    check_in_photo_url: "/images/checkin/john_doe.jpg",
   },
   {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
+    id: "2",
+    first_name: "Jane",
+    last_name: "Smith",
+    check_in_time: "2024-09-10T09:00:00Z",
+    check_out_time: null,
+    check_in_photo_url: "/images/checkin/jane_smith.jpg",
   },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-  },
+  // Add more users here
 ];
 
-export type Payment = {
+export type User = {
   id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
+  first_name: string;
+  last_name: string;
+  check_in_time: string | null;
+  check_out_time: string | null;
+  check_in_photo_url: string | null;
 };
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<User>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -100,47 +89,57 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "first_name",
+    header: "First Name",
+  },
+  {
+    accessorKey: "last_name",
+    header: "Last Name",
+  },
+  {
+    accessorKey: "check_in_time",
+    header: "Check In Time",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div>
+        {row.getValue("check_in_time")
+          ? new Date(row.getValue("check_in_time")).toLocaleString()
+          : "N/A"}
+      </div>
     ),
   },
   {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    accessorKey: "check_out_time",
+    header: "Check Out Time",
+    cell: ({ row }) => (
+      <div>
+        {row.getValue("check_out_time")
+          ? new Date(row.getValue("check_out_time")).toLocaleString()
+          : "N/A"}
+      </div>
+    ),
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
+    accessorKey: "check_in_photo_url",
+    header: "Check In Photo",
+    cell: ({ row }) => (
+      <div>
+        {row.getValue("check_in_photo_url") ? (
+          <img
+            src={row.getValue("check_in_photo_url")}
+            alt="Check In Photo"
+            className="w-24 h-24 object-cover"
+          />
+        ) : (
+          "No Photo"
+        )}
+      </div>
+    ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const user = row.original;
 
       return (
         <DropdownMenu>
@@ -153,13 +152,13 @@ export const columns: ColumnDef<Payment>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(user.id)}
             >
-              Copy payment ID
+              Copy User ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>View Details</DropdownMenuItem>
+            {/* Add more actions if needed */}
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -199,10 +198,12 @@ export function DataTableDemo() {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter names..."
+          value={
+            (table.getColumn("first_name")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("first_name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

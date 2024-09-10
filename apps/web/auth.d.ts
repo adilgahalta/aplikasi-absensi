@@ -11,15 +11,13 @@ declare module "next-auth" {
     first_name: string | undefined;
     last_name: string | undefined;
     phone_number: string | undefined;
-    roleId: number | undefined;
+    role: Role | undefined;
   }
 
   interface Session {
     user: User;
   }
 }
-
-import { JWT } from "next-auth";
 
 declare module "next-auth/jwt" {
   interface JWT {
@@ -33,6 +31,11 @@ declare module "next-auth/jwt" {
     last_name: string | undefined;
     email: string | undefined;
     phone_number: string | undefined;
-    roleId: number | undefined;
+    role: Role | undefined;
   }
+}
+
+interface Role {
+  id: number;
+  name: string;
 }
